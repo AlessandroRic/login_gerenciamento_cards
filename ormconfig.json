@@ -1,0 +1,8 @@
+{
+    "type": "sqlite",
+    "database": "path/to/your/database.db",
+    "entities": [
+        "src/models/**/*.ts"
+    ],
+    "synchronize": true
+}

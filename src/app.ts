@@ -6,8 +6,8 @@ import authRoutes from './routes/authRoutes';
 import cardRoutes from './routes/cardRoutes';
 
 // Importando os middlewares
-import authMiddleware from './middleware/authMiddleware';
-import loggingMiddleware from './middleware/loggingMiddleware';
+import { authMiddleware } from './middleware/authMiddleware';
+import { loggingMiddleware } from './middleware/loggingMiddleware';
 
 const app: Express = express();
 
