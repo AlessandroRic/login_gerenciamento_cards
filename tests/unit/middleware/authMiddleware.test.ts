@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { authMiddleware } from '../middleware/authMiddleware'; //ToDo
+import { authMiddleware } from '../../../src/middleware/authMiddleware';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 

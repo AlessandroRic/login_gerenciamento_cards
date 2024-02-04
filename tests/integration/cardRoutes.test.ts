@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../app'; //ToDo
+import app from '../../src/app';
 
 describe('Testes das rotas de card', () => {
   it('deve criar um novo card', async () => {

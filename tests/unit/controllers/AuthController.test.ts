@@ -1,4 +1,4 @@
-import { AuthController } from '../controllers/AuthController'; //ToDo
+import { AuthController } from '../../../src/controllers/AuthController';
 import { Request, Response } from 'express';
 import dotenv from 'dotenv';
 

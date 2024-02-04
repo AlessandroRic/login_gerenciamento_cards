@@ -1,4 +1,4 @@
-import { CardController } from '../controllers/CardController'; //ToDo
+import { CardController } from '../../../src/controllers/CardController';
 import { Request, Response } from 'express';
 
 describe('Testes do CardController', () => {

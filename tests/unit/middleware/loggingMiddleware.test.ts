@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { loggingMiddleware } from '../middleware/loggingMiddleware'; //ToDo
+import { loggingMiddleware } from '../../../src/middleware/loggingMiddleware';
 
 describe('Testes do loggingMiddleware', () => {
   let mockRequest: Partial<Request>;

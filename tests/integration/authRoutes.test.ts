@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../app'; //ToDo
+import app from '../../src/app';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -15,7 +15,6 @@ describe('Testes das rotas de autenticação', () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('token');
-    // Verificações adicionais podem ser feitas aqui
   });
 
   it('não deve autenticar com credenciais inválidas', async () => {
