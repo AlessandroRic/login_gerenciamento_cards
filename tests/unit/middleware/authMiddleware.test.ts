@@ -8,7 +8,7 @@ dotenv.config();
 describe('Testes do authMiddleware', () => {
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
-  let nextFunction: NextFunction = jest.fn();
+  const nextFunction: NextFunction = jest.fn();
 
   beforeEach(() => {
     mockRequest = {};

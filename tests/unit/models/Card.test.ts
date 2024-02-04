@@ -12,7 +12,7 @@ describe('Testes do modelo Card', () => {
     await AppDataSource.destroy();
   });
 
-it('deve criar um novo card', async () => {
+  it('deve criar um novo card', async () => {
     const cardData: Partial<Card> = { titulo: 'Novo Card', conteudo: 'Conteúdo do card', lista: 'Lista 1' };
     const card = Card.create(cardData);
 
@@ -20,7 +20,7 @@ it('deve criar um novo card', async () => {
 
     expect(savedCard).toHaveProperty('id');
     expect((savedCard as Card).titulo).toBe(cardData.titulo);
-});
+  });
 
   it('deve buscar um card existente', async () => {
     const card = await AppDataSource.manager.findOneBy(Card, { titulo: 'Novo Card' });

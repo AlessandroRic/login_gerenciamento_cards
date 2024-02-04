@@ -20,7 +20,7 @@ app.use('/cards', authMiddleware, loggingMiddleware, cardRoutes);
 
 // Configuração para lidar com rotas não encontradas
 app.use((req, res) => {
-    res.status(404).send('Página não encontrada');
+  res.status(404).send('Página não encontrada');
 });
 
 export default app;
