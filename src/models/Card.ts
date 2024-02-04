@@ -15,3 +15,4 @@ export class Card extends BaseEntity {
     @Column({ type: 'varchar', length: 255 })
     lista!: string;
 }
+/* eslint-enable @typescript-eslint/no-unused-vars */
