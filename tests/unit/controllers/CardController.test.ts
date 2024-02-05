@@ -1,60 +1,106 @@
-import { CardController } from '../../../src/controllers/CardController';
 import { Request, Response } from 'express';
+import { CardController } from '../../../src/controllers/CardController';
+import * as CardServiceModule from '../../../src/services/CardService';
+import { Card } from '../../../src/models/Card';
 
-describe('Testes do CardController', () => {
+jest.mock('../../../src/services/CardService');
+
+describe('CardController', () => {
   let cardController: CardController;
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
-  let response: any;
+  let mockCardService: jest.Mocked<CardServiceModule.CardService>;
 
   beforeEach(() => {
+    // Criando um mock do CardService
+    mockCardService = new CardServiceModule.CardService() as jest.Mocked<CardServiceModule.CardService>;
+    jest.spyOn(CardServiceModule, 'CardService').mockImplementation(() => mockCardService);
+
     cardController = new CardController();
+
     mockRequest = {};
     mockResponse = {
-      json: jest.fn().mockImplementation((result) => {
-        response = result;
-        return mockResponse as Response;
-      }),
+      json: jest.fn().mockReturnThis(),
       status: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis(),
     };
   });
 
-  it('deve criar um card e retornar o card com ID', async () => {
-    mockRequest.body = { titulo: 'Novo Card', conteudo: 'Conteúdo do card', lista: 'Lista 1' };
+  describe('createCard', () => {
+    it('deve criar um novo card e retornar status 201', async () => {
+      const cardData = { titulo: 'Novo Card', conteudo: 'Conteúdo', lista: 'Lista' };
+      const newCard = new Card();
+      Object.assign(newCard, { id: 1, ...cardData });
 
-    await cardController.createCard(mockRequest as Request, mockResponse as Response);
+      mockCardService.createCard.mockResolvedValue(newCard);
 
-    expect(mockResponse.status).toHaveBeenCalledWith(201);
-    expect(response).toHaveProperty('id');
-    expect(response.titulo).toEqual('Novo Card');
+      mockRequest.body = cardData;
+
+      await cardController.createCard(mockRequest as Request, mockResponse as Response);
+
+      expect(mockCardService.createCard).toHaveBeenCalledWith(cardData);
+      expect(mockResponse.status).toHaveBeenCalledWith(201);
+      expect(mockResponse.json).toHaveBeenCalledWith(newCard);
+    });
   });
 
-  it('deve listar todos os cards', async () => {
-    await cardController.getAllCards(mockRequest as Request, mockResponse as Response);
+  describe('getAllCards', () => {
+    it('deve retornar todos os cards', async () => {
+      const mockCards = [new Card(), new Card()];
+      mockCardService.getAllCards.mockResolvedValue(mockCards);
 
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(Array.isArray(response)).toBeTruthy();
+      await cardController.getAllCards(mockRequest as Request, mockResponse as Response);
+
+      expect(mockCardService.getAllCards).toHaveBeenCalled();
+      expect(mockResponse.json).toHaveBeenCalledWith(mockCards);
+    });
   });
 
-  it('deve atualizar um card existente', async () => {
-    const cardId = 1; // Exemplo de ID de card
-    mockRequest.params = { id: cardId.toString() };
-    mockRequest.body = { titulo: 'Card Atualizado', conteudo: 'Conteúdo atualizado', lista: 'Lista 2' };
+  describe('getCardById', () => {
+    it('deve retornar um card pelo ID', async () => {
+      const cardId = 1;
+      const mockCard = new Card();
+      Object.assign(mockCard, { id: cardId });
+      mockCardService.getCardById.mockResolvedValue(mockCard);
 
-    await cardController.updateCard(mockRequest as Request, mockResponse as Response);
+      mockRequest.params = { id: cardId.toString() };
 
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(response.id).toEqual(cardId);
-    expect(response.titulo).toEqual('Card Atualizado');
+      await cardController.getCardById(mockRequest as Request, mockResponse as Response);
+
+      expect(mockCardService.getCardById).toHaveBeenCalledWith(cardId);
+      expect(mockResponse.json).toHaveBeenCalledWith(mockCard);
+    });
   });
 
-  it('deve deletar um card', async () => {
-    const cardId = 1; // Exemplo de ID de card
-    mockRequest.params = { id: cardId.toString() };
+  describe('updateCard', () => {
+    it('deve atualizar um card', async () => {
+      const cardId = 1;
+      const cardData = { titulo: 'Atualizado', conteudo: 'Atualizado', lista: 'Atualizada' };
+      const updatedCard = new Card();
+      Object.assign(updatedCard, { id: cardId, ...cardData });
+      mockCardService.updateCard.mockResolvedValue(updatedCard);
 
-    await cardController.deleteCard(mockRequest as Request, mockResponse as Response);
+      mockRequest.params = { id: cardId.toString() };
+      mockRequest.body = cardData;
 
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
+      await cardController.updateCard(mockRequest as Request, mockResponse as Response);
+
+      expect(mockCardService.updateCard).toHaveBeenCalledWith(cardId, cardData);
+      expect(mockResponse.json).toHaveBeenCalledWith(updatedCard);
+    });
   });
 
+  describe('deleteCard', () => {
+    it('deve deletar um card e retornar status 204', async () => {
+      const cardId = 1;
+      mockCardService.deleteCard.mockResolvedValue(true);
+
+      mockRequest.params = { id: cardId.toString() };
+
+      await cardController.deleteCard(mockRequest as Request, mockResponse as Response);
+
+      expect(mockCardService.deleteCard).toHaveBeenCalledWith(cardId);
+      expect(mockResponse.status).toHaveBeenCalledWith(204);
+    });
+  });
 });

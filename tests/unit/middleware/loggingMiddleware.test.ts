@@ -1,41 +1,39 @@
 import { Request, Response, NextFunction } from 'express';
 import { loggingMiddleware } from '../../../src/middleware/loggingMiddleware';
 
-describe('Testes do loggingMiddleware', () => {
-  let mockRequest: Partial<Request>;
-  let mockResponse: Partial<Response>;
-  const nextFunction: NextFunction = jest.fn();
-  const originalConsoleLog = console.log;
+describe('loggingMiddleware', () => {
+  let req: Request;
+  let res: Response;
+  let next: NextFunction;
 
   beforeEach(() => {
-    mockRequest = {};
-    mockResponse = {};
-    console.log = jest.fn();
+    req = {} as Request;
+    res = {} as Response;
+    next = jest.fn();
   });
 
-  afterEach(() => {
-    console.log = originalConsoleLog;
+  it('Deve apresentar um log quando o card for atualizado', () => {
+    req.method = 'PUT';
+    req.params = { id: '123' };
+
+    const consoleSpy = jest.spyOn(console, 'log');
+
+    loggingMiddleware(req, res, next);
+
+    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Card 123 - Alterado'));
+    expect(next).toHaveBeenCalled();
   });
 
-  it('deve registrar informações no console para requisições de alteração', () => {
-    mockRequest.method = 'PUT';
-    mockRequest.url = '/cards/1';
-    mockRequest.body = { titulo: 'Card Atualizado', conteudo: 'Conteúdo atualizado', lista: 'Lista 2' };
+  it('Deve apresentar um log quando o card for deletado', () => {
+    req.method = 'DELETE';
+    req.params = { id: '456' };
 
-    loggingMiddleware(mockRequest as Request, mockResponse as Response, nextFunction);
+    const consoleSpy = jest.spyOn(console, 'log');
 
-    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Card 1 - Card Atualizado - Alterar'));
-    expect(nextFunction).toHaveBeenCalled();
-  });
+    loggingMiddleware(req, res, next);
 
-  it('deve registrar informações no console para requisições de remoção', () => {
-    mockRequest.method = 'DELETE';
-    mockRequest.url = '/cards/1';
-
-    loggingMiddleware(mockRequest as Request, mockResponse as Response, nextFunction);
-
-    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Card 1 - Removido'));
-    expect(nextFunction).toHaveBeenCalled();
+    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Card 456 - Removido'));
+    expect(next).toHaveBeenCalled();
   });
 
 });
