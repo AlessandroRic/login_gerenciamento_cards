@@ -1,6 +1,7 @@
 # Logs
 logs
 *.log
+*.db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -10,13 +11,17 @@ node_modules/
 dist/
 build/
 temp/
+dbpath/
+dbpath/database.db
 
 # Arquivos de instalação do Yarn
 .yarn
 .yarn-cache
 
 # Arquivos de ambiente
+.vscode/
 .env
 
 # Arquivos de cache local
 .cache/
+dbpath/database.db

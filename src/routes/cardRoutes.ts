@@ -6,12 +6,12 @@ const router = Router();
 const cardController = new CardController();
 
 // Rota para listar todos os cards
-router.get('/cards/', (req, res) => {
+router.get('/cards', (req, res) => {
   cardController.getAllCards(req, res);
 });
 
 // Rota para criar um novo card
-router.post('/cards/', (req, res) => {
+router.post('/cards', (req, res) => {
   cardController.createCard(req, res);
 });
 

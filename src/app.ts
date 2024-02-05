@@ -14,8 +14,8 @@ const app: Express = express();
 app.use(bodyParser.json());
 
 // Configurando as rotas
-app.use('/login', authRoutes);
-app.use('/cards', authMiddleware, cardRoutes);
+app.use(authRoutes);
+app.use(authMiddleware, cardRoutes);
 
 // Configuração para lidar com rotas não encontradas
 app.use((req, res) => {
