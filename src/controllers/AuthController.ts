@@ -13,7 +13,7 @@ export class AuthController {
 
       if (login === process.env.AUTH_USER && senha === process.env.AUTH_PASSWORD) {
         const token = this.authService.generateToken({ nome: login, senha: senha });
-        res.json({ token });
+        res.status(200).json({ token });
       } else {
         res.status(401).json({ mensagem: 'Credenciais inválidas' });
       }

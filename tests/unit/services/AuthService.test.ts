@@ -7,19 +7,23 @@ describe('Testes do AuthService', () => {
   const authService = new AuthService();
 
   it('deve autenticar o usuário com credenciais válidas', () => {
-    const authUser = process.env.AUTH_USER;
-    const authPassword = process.env.AUTH_PASSWORD;
+    const user = {
+      nome: process.env.AUTH_USER || '',
+      senha: process.env.AUTH_PASSWORD || ''
+    };
 
-    const result = authService.generateToken(authUser, authPassword);
+    const result = authService.generateToken(user);
     
     expect(result).toBeTruthy();
   });
 
   it('não deve autenticar o usuário com credenciais inválidas', () => {
-    const invalidUser = 'invalidUser';
-    const invalidPassword = 'invalidPassword';
+    const invalidUser = {
+      nome: 'invalidUser',
+      senha: 'invalidPassword'
+    };
 
-    const result = authService.generateToken(invalidUser, invalidPassword);
+    const result = authService.generateToken(invalidUser);
     
     expect(result).toBeFalsy();
   });

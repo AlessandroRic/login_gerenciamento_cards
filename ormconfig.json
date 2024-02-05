@@ -1,6 +1,6 @@
 {
     "type": "sqlite",
-    "database": "path/to/your/database.db",
+    "database": "dbpath/database.db",
     "entities": [
         "src/models/**/*.ts"
     ],

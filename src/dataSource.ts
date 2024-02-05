@@ -4,7 +4,7 @@ import { Card } from './models/Card';
 
 export const AppDataSource = new DataSource({
   type: 'sqlite',
-  database: 'path/to/your/database.db',
+  database: 'dbpath/database.db',
   entities: [Card],
   synchronize: true,
   logging: false,
